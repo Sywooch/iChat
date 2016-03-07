@@ -2,10 +2,15 @@
 namespace frontend\controllers;
 
 
-use frontend\models\Index;
+
+use common\models\BlackList;
+use common\models\Messages;
+use common\models\User;
+use common\models\Contacts;
 use frontend\models\ChangeEmailForm;
 use frontend\models\ChangePasswordForm;
 use frontend\models\SettingForm;
+use common\models\IndexForm;
 use Yii;
 use common\models\LoginForm;
 use frontend\models\About;
@@ -17,11 +22,13 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\data\SqlDataProvider;
 
 
 
 /**
  * Site controller
+ * @var $messages array
  */
 class SiteController extends Controller
 {
@@ -82,9 +89,168 @@ class SiteController extends Controller
         if (Yii::$app->user->isGuest) {
             return $this->actionLogin();
         }elseif (Yii::$app->user->identity) {
-            return $this->render('index');
+
+            if(Yii::$app->request->get('id_user')) {
+
+
+                $black_list = BlackList::findOne([
+                    'my_id' => Yii::$app->request->get('id_user'),
+                    'blocked_user_id' => Yii::$app->user->identity->id,
+                ]);
+                if(isset($black_list)) {
+                    Yii::$app->session->setFlash('danger', 'Пользователь занес вас в черный список, вы не можете добавить его в контакты и писать ему сообщения.');
+                    return $this->actionLogin();
+                }else {
+
+
+                    $messages = Messages::findAllMessageFromUser(Yii::$app->request->get('id_user'));
+                    Contacts::readContact(Yii::$app->user->identity->id, Yii::$app->request->get('id_user'));
+                    $user = User::findById(Yii::$app->request->get('id_user'));
+                    $model = new IndexForm();
+                    if ($model->load(Yii::$app->request->post())) {
+                        $model->sendMessage();
+                        return $this->refresh();
+                    }
+
+                }
+            }
+
+            $contacts = Contacts::findAllContacts(Yii::$app->user->identity->id);
+
+            return $this->render('index', [
+                'model' => $model,
+                'contacts' => $contacts,
+                'messages' => $messages,
+                'user' => $user,
+            ]);
+
         }
     }
+
+
+
+    public function actionDeleteContact()
+    {
+        $contacts = Contacts::findOne([
+            'my_id' => Yii::$app->user->identity->id,
+            'contact_id' => Yii::$app->request->get('id'),
+        ]);
+        if(isset($contacts)) {
+            $contacts->delete();
+        }
+        return $this->actionSearchContacts();
+    }
+
+
+    public function actionAddContact()
+    {
+        $black_list = BlackList::findOne([
+            'my_id' => Yii::$app->request->get('id'),
+            'blocked_user_id' => Yii::$app->user->identity->id,
+        ]);
+        if(isset($black_list)) {
+            Yii::$app->session->setFlash('danger', 'Пользователь занес вас в черный список, вы не можете добавить его в контакты и писать ему сообщения.');
+            return $this->actionSearchContacts();
+        }else {
+            Contacts::newContact(Yii::$app->user->identity->id, Yii::$app->request->get('id'));
+            Contacts::newContact(Yii::$app->request->get('id'), Yii::$app->user->identity->id);
+            return $this->actionSearchContacts();
+        }
+    }
+
+
+
+    public function actionAddBlackList ()
+    {
+        $black_list = BlackList::findOne([
+            'my_id' => Yii::$app->user->identity->id,
+            'blocked_user_id' => Yii::$app->request->get('id'),
+        ]);
+        if(!isset($black_list)) {
+            $black_list = new BlackList();
+            $black_list->my_id = Yii::$app->user->identity->id;
+            $black_list->blocked_user_id = Yii::$app->request->get('id');
+            $black_list->save();
+        }
+        $contact = Contacts::findOne([
+            'my_id' => Yii::$app->user->identity->id,
+            'contact_id' => Yii::$app->request->get('id'),
+        ]);
+        if(isset($contact)) {
+            $contact->delete();
+        }
+        $contact = Contacts::findOne([
+            'my_id' => Yii::$app->request->get('id'),
+            'contact_id' => Yii::$app->user->identity->id,
+        ]);
+        if(isset($contact)) {
+            $contact->delete();
+        }
+        return $this->actionSearchContacts();
+    }
+
+
+
+
+
+
+
+
+
+    public function actionUnBlocked()
+    {
+        $un_blocked = BlackList::findOne([
+            'my_id' => Yii::$app->user->identity->id,
+            'blocked_user_id' => Yii::$app->request->get('id'),
+        ]);
+        if(isset($un_blocked)) {
+            $un_blocked->delete();
+        }
+        return $this->actionSearchContacts();
+    }
+
+
+
+
+    public function actionSearchContacts()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->actionLogin();
+        }elseif (Yii::$app->user->identity) {
+            // получаем свои контакты
+            $contacts = Contacts::findAllContacts(Yii::$app->user->identity->id);
+
+            // получаем заблокированных пользователей
+            $blocked_users = BlackList::getBlockedUsers();
+            // получаем всех пользователей
+            $allUsers = User::findAllUsers();
+            // подсчитываем общее количество пунктов
+
+
+
+            $totalCount = Yii::$app->db->createCommand('SELECT COUNT(*) FROM Users Where validation_email=:status', [':status' => 'confirmed'])->queryScalar();
+            $sql = 'SELECT * FROM Users Where validation_email=:status';
+            $dataProvider = new SqlDataProvider([
+                'sql' => $sql,
+                'params' => [':status' => 'confirmed'],
+                'totalCount' => (int)$totalCount,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
+            ]);
+
+
+
+            return $this->render('searchContacts', [
+                'blocked_users' => $blocked_users,
+                'contacts' => $contacts,
+                'allUsers' => $allUsers,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+    }
+
+
 
     /**
      * Logs in a user.
@@ -263,6 +429,17 @@ class SiteController extends Controller
             ]);
         }
     }
+
+
+
+    public function actionDeleteUser()
+    {
+        User::findOne(Yii::$app->user->identity->id)->delete();
+        Yii::$app->user->logout();
+        return $this->goHome();
+    }
+
+
 
 
 }

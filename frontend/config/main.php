@@ -12,9 +12,16 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
+
+
+
+
+
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'baseUrl' => '/iChat/',
             'enableStrictParsing' => true,
             'rules' => [
                 [
@@ -45,6 +52,12 @@ return [
 
             ],
         ],
+
+
+
+
+
+
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,

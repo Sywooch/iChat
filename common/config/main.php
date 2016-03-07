@@ -3,6 +3,7 @@ return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'language' => 'ru_RU',
     'components' => [
+
         'mail' => [
             'class'            => 'yii\swiftmailer\Mailer',
             'viewPath'         => '@common/mail',
@@ -20,6 +21,7 @@ return [
                 'password'   => '123454321qwe',
             ],
         ],
+
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

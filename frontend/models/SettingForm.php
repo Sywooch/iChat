@@ -33,7 +33,7 @@ class SettingForm extends Model
 
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'required', 'message' => 'Это поле обязательно для заполнения'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Пользователь с таким именим уже существует.', 'filter' => ['!=', 'username', Yii::$app->user->identity->username]],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Пользователь с таким именем уже существует.', 'filter' => ['!=', 'username', Yii::$app->user->identity->username]],
             ['username', 'string', 'min' => 3, 'max' => 25],
         ];
     }

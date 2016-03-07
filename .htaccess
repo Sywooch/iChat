@@ -7,5 +7,5 @@
     RewriteCond %{HTTP_HOST} ^cp.(.*)$ [NC]
     RewriteRule ^(.*)$ backend/web/$1 [L]
 
-    RewriteRule ^(.*)$ frontend/web/$1 [L]
+    RewriteRule ^(.*)$ frontend/web/index.php/$1 [L]
 </IfModule>

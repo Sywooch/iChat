@@ -29,20 +29,23 @@ AppAsset::register($this);
     <?php
     NavBar::begin([
         'brandLabel' => 'iChat',
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandUrl' => '/iChat',
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Войти', 'url' => ['site/login']];
     } else {
         $menuItems[] = [
-            'label' => 'Настройки', 'url' => ['/site/setting'],
+            'label' => 'Пользователи', 'url' => ['site/search-contacts'],
+        ];
+        $menuItems[] = [
+            'label' => 'Настройки', 'url' => ['site/setting'],
         ];
         $menuItems[] = [
             'label' => 'Выход (' . Yii::$app->user->identity->username . ')',
-            'url' => ['/site/logout'],
+            'url' => ['site/logout'],
             'linkOptions' => ['data-method' => 'post']
         ];
     }

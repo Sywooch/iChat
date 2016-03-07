@@ -59,6 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+
     /**
      * @inheritdoc
      */
@@ -75,6 +76,14 @@ class User extends ActiveRecord implements IdentityInterface
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
+
+    public static function findAllUsers()
+    {
+        return (new \yii\db\Query())
+            ->select(['*'])
+            ->from('users')
+            ->all();
+    }
     /**
      * Finds user by username
      *
@@ -84,6 +93,11 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByUsername($username)
     {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    public static function findById($id)
+    {
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
