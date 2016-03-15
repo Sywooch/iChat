@@ -26,7 +26,7 @@ return [
             'rules' => [
                 [
                     'pattern' => '',
-                    'route' => 'site/index',
+                    'route' => '',
                     'suffix' => '',
                 ],
                 [
@@ -53,7 +53,9 @@ return [
             ],
         ],
 
-
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
 
 
 

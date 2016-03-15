@@ -91,7 +91,7 @@ a.desc:after {
 }
 
 .panel-body-contact {
-    height: 500px;
+    height: 243px;
     overflow-y:scroll;
     scrollbar-arrow-color:#000000;
     scrollbar-base-color: #228B22;
@@ -116,6 +116,12 @@ a.desc:after {
     height: 790px;
 }
 
+.message-img {
+    margin-top: 10px;
+    max-width: 350px;
+    max-height: 250px;
+    float: none;
+}
 
 
 
@@ -124,8 +130,9 @@ a.desc:after {
 
 
 
-
-
+.help-block {
+    width: 700px;
+}
 
 
 
@@ -235,7 +242,7 @@ small, .small {
 
 
 
-.chat li img {
+.chat li span img {
     width: 45px;
     height: 45px;
     border-radius: 50em;

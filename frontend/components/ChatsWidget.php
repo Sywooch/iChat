@@ -4,13 +4,14 @@ namespace app\components;
 
 use yii\base\Widget;
 
-class ContactsWidget extends Widget {
+class ChatsWidget extends Widget {
+
 
     public function init() {
 
     }
 
     public function run() {
-        return $this->render('contacts');
+        return $this->render('chats');
     }
 }

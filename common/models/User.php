@@ -24,18 +24,22 @@ use yii\web\IdentityInterface;
  * @property integer $updated_at
  * @property string $password write-only password
  * @property string $validation_email
+ * @property integer $send_email
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    const SEND_EMAIL = 1;
+    const NOT_SEND_EMAIL = 0;
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%users}}';
+        return '{{%user}}';
     }
 
     /**
@@ -63,6 +67,16 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
+    public static function sendEmailUser($id)
+    {
+        $user = static::findOne(['id' => $id]);
+        if($user['send_email'] == self::SEND_EMAIL) {
+            return true;
+        }elseif($user['send_email'] == self::NOT_SEND_EMAIL) {
+            return false;
+        }
+    }
+
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
@@ -81,7 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return (new \yii\db\Query())
             ->select(['*'])
-            ->from('users')
+            ->from('user')
             ->all();
     }
     /**

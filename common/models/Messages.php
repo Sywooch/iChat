@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property integer $for_user
  * @property string $chat_name
  * @property string $message
+ * @property string $file
  * @property string $date_time
  */
 class Messages extends ActiveRecord
@@ -35,7 +36,8 @@ class Messages extends ActiveRecord
             [['from_user', 'for_user'], 'integer'],
             [['date_time'], 'safe'],
             [['chat_name'], 'string', 'max' => 250],
-            [['message'], 'string', 'max' => 10000]
+            [['message'], 'string', 'max' => 10000],
+            [['file'], 'string', 'max' => 128]
         ];
     }
 
@@ -50,6 +52,7 @@ class Messages extends ActiveRecord
             'for_user' => 'For User',
             'chat_name' => 'Chat Name',
             'message' => 'Message',
+            'file' => 'File',
             'date_time' => 'Date Time',
         ];
     }
@@ -60,10 +63,22 @@ class Messages extends ActiveRecord
         return (new \yii\db\Query())
             ->select(['*'])
             ->from('messages')
-            ->join('LEFT JOIN', 'users', 'messages.from_user = users.id')
+            ->join('LEFT JOIN', 'user', 'messages.from_user = user.id')
             ->where(['from_user' => Yii::$app->user->identity->id, 'for_user' => $id_user])
             ->orWhere(['from_user' => $id_user, 'for_user' => Yii::$app->user->identity->id])
             ->andWhere(['chat_name' => 'private'])
+            ->orderBy('date_time')
+            ->all();
+    }
+
+    public static function findAllMessageChat($chat_name)
+    {
+        return (new \yii\db\Query())
+            ->select(['*'])
+            ->from('messages')
+            ->join('LEFT JOIN', 'user', 'messages.from_user = user.id')
+            ->Where(['chat_name' => $chat_name])
+            ->orderBy('date_time')
             ->all();
     }
 

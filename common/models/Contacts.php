@@ -4,7 +4,6 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-//use common\models\User;
 
 /**
  * This is the model class for table "Contacts".
@@ -57,7 +56,7 @@ class Contacts extends ActiveRecord
         return (new \yii\db\Query())
             ->select(['*'])
             ->from('contacts')
-            ->join('LEFT JOIN', 'users', 'contacts.contact_id = users.id')
+            ->join('LEFT JOIN', 'user', 'contacts.contact_id = user.id')
             ->where(['my_id' => $my_id])
             ->orderBy(['datetime_lastmessage' => SORT_DESC])
             ->all();

@@ -10,9 +10,11 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
+
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,

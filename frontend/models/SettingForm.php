@@ -17,6 +17,7 @@ class SettingForm extends Model
     public $lastname;
     public $firstname;
     public $email;
+    public $send_email;
     private $_user;
 
     /**
@@ -35,6 +36,8 @@ class SettingForm extends Model
             ['username', 'required', 'message' => 'Это поле обязательно для заполнения'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Пользователь с таким именем уже существует.', 'filter' => ['!=', 'username', Yii::$app->user->identity->username]],
             ['username', 'string', 'min' => 3, 'max' => 25],
+
+            [['send_email'], 'default', 'value' => '0'],
         ];
     }
 
@@ -49,6 +52,7 @@ class SettingForm extends Model
             }
             $user->firstname = $this->firstname;
             $user->lastname = $this->lastname;
+            $user->send_email = $this->send_email;
             if ($user->save(false)) {
                 Yii::$app->session->setFlash('success', 'Настройки аккаунта успешно обновлены.');
             }

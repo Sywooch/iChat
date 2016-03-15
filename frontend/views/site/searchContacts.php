@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use app\components\UserProfileWidget;
 use app\components\ContactsWidget;
-
+use app\components\ChatsWidget;
 
 $this->title = 'My Yii Application';
 ?>
@@ -18,14 +18,15 @@ $this->title = 'My Yii Application';
         <div class="col-lg-4">
 
             <?= UserProfileWidget::widget() ?>
-            <?= ContactsWidget::widget(['contacts' => $contacts]) ?>
+            <?= ContactsWidget::widget() ?>
+            <?= ChatsWidget::widget() ?>
 
         </div>
         <div class="col-lg-8">
 
-
                 <?= GridView::widget([
                 'dataProvider' => $dataProvider,
+                    'filterModel' => $dataProvider,
                     'rowOptions' => function ($data) use ($contacts, $blocked_users)
                     {
                         if($data['id'] == Yii::$app->user->identity->id) {
@@ -44,23 +45,23 @@ $this->title = 'My Yii Application';
                     },
                 'columns' => [
                 //['class' => 'yii\grid\SerialColumn'],
-                    'id',
+                'id',
                 [
                     'label' => 'Логин',
-                    'value' => 'username',
+                    'attribute' => 'username',
                 ],
                 [
                     'label' => 'Имя',
-                    'value' => 'firstname',
+                    'attribute' => 'firstname',
                 ],
-                    [
-                        'label' => 'Фамилия',
-                        'value' => 'lastname',
-                    ],
-                    [
-                        'label' => 'E-Mail',
-                        'value' => 'email',
-                    ],
+                [
+                    'label' => 'Фамилия',
+                    'attribute' => 'lastname',
+                ],
+                [
+                    'label' => 'E-Mail',
+                    'attribute' => 'email',
+                ],
                 [
                     'label' => 'Контакты',
                     'format' => 'raw',

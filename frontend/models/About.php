@@ -46,7 +46,7 @@ class About extends Model
      * @throws \yii\db\Exception
      */
     private function updateValidationEmail() {
-        Yii::$app->db->createCommand()->update('users', array('validation_email'=>'confirmed'), 'username=:username', array(':username'=>$this->username))->execute();
+        Yii::$app->db->createCommand()->update('user', array('validation_email'=>'confirmed'), 'username=:username', array(':username'=>$this->username))->execute();
 
     }
 

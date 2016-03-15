@@ -20,8 +20,6 @@ $this->title = 'Сброс пароля';
 
     <p>Введите ваш новый пароль:</p>
 
-
-
             <?php $form = ActiveForm::begin(['id' => 'reset-password-form']); ?>
 
                 <?= $form->field($model, 'password')->passwordInput() ?>
@@ -31,9 +29,6 @@ $this->title = 'Сброс пароля';
                 </div>
 
             <?php ActiveForm::end(); ?>
-
-
-
 
     </div>
     <div class="col-lg-4"></div>

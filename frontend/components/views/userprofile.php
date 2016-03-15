@@ -3,7 +3,16 @@ use yii\helpers\Html;
 ?>
 <div class="panel panel-default">
     <div class="panel-heading panel-heading-contacts">
-        <span class="panel-title">Профиль</span>
+        <div class="row">
+            <div class="col-lg-8">
+                <span class="panel-title">Профиль</span>
+            </div>
+            <div class="col-lg-4">
+                <?= Html::a('Редактировать', ['site/setting'], ['class' => 'btn btn-xs btn-info']) ?>
+            </div>
+
+
+        </div>
     </div>
     <div class="panel-body panel-body-info-user">
         <div class="col-lg-4">
@@ -15,5 +24,4 @@ use yii\helpers\Html;
             <p class="p-height"><b>Логин: </b><?= Yii::$app->user->identity->username ?></p>
         </div>
     </div>
-    <div class="panel-footer panel-footer-right"><?= Html::a('Редактировать', ['site/setting'], ['class' => 'btn btn-link btn-sm']) ?></div>
 </div>

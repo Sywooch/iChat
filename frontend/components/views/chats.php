@@ -9,29 +9,30 @@ use yii\helpers\Html;
     <div class="panel-heading panel-heading-contacts">
         <span class="panel-title">
             <div class="row">
-                <div class="col-lg-6">
-                    Контакты
+                <div class="col-lg-9">
+                    Чаты
                 </div>
-                <div class="col-lg-6">
-                    <?= Html::a('Добавить пользователя', ['site/search-contacts'], ['class' => 'btn btn-xs btn-info']) ?>
+                <div class="col-lg-3">
+                    <?= Html::a('Новый', ['site/great-new-chat'], ['class' => 'btn btn-block btn-xs btn-info']) ?>
                 </div>
             </div>
         </span>
     </div>
     <div class="panel-body panel-body-contact">
-        <ul class="friend-list" id="contacts-friend-list">
+        <ul class="friend-list" id="chats-friend-list">
         </ul>
     </div>
 </div>
+
 <?php
 $script = <<< JS
-setTimeout(getContacts, 0);
-setInterval(getContacts, 5000);
-function getContacts(){
+setTimeout(getChats, 0);
+setInterval(getChats, 5000);
+function getChats(){
     $.ajax({
-    url: 'http://amarstd.myjino.ru/iChat/site/ajax-contacts',
+    url: 'http://amarstd.myjino.ru/iChat/site/ajax-chats',
     success: function(data) {
-        $('#contacts-friend-list').html(data);
+        $('#chats-friend-list').html(data);
     }
     });
 }

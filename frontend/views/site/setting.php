@@ -52,7 +52,15 @@ $this->title = 'Личные данные';
                                 'data-toggle' => 'modal',
                                 'data-target' => '#delete-user'
                             ]
-                )?>
+                );
+
+                if(Yii::$app->user->identity->send_email == 1) {
+                    $checked = true;
+                }elseif(Yii::$app->user->identity->send_email == 0) {
+                    $checked = false;
+                }
+
+                ?>
             </div>
         </div>
 
@@ -65,6 +73,13 @@ $this->title = 'Личные данные';
 
                     <?= $form->field($model, 'lastname')->label('Фамилия')->textInput(['value'=> \Yii::$app->user->identity->lastname]) ?>
 
+                    <?= $form->field($model, 'send_email')->checkbox([
+                        'label' => 'Отправлять подтверждение на E-Mail при получении сообщения',
+                        'labelOptions' => [
+                            'style' => 'margin-left: 20px;'
+                        ],
+                        'checked ' => $checked
+                    ]); ?>
 
                         <div class="form-group">
                             <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary',
