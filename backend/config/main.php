@@ -15,6 +15,10 @@ return [
     'modules' => [],
     'components' => [
 
+        'urlManager' => [
+            'baseUrl' => '/iChat/admin/',
+        ],
+
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,

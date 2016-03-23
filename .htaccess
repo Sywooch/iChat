@@ -4,14 +4,11 @@
 </IfModule>
 
 <IfModule mod_rewrite.c>
-    RewriteCond %{HTTP_HOST} ^cp.(.*)$ [NC]
 
-
-    RewriteRule ^iChat/admin/(.*)$ backend/web/index.php/$1 [L,PT]
-
+    RewriteCond %{HTTP_HOST} ^(.*)$ [NC]
+    RewriteRule ^admin/?(.*) backend/web/index.php/$1 [L]
     RewriteRule ^(.*)$ frontend/web/index.php/$1 [L]
 
 </IfModule>
-
 
 

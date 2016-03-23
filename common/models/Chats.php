@@ -59,7 +59,6 @@ class Chats extends ActiveRecord
         $chats = parent::findOne([
             'chat_name' => Yii::$app->request->get('chat')
         ]);
-
         if($chats['who_great'] == Yii::$app->user->identity->id)
         {
             return true;

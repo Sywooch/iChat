@@ -6,6 +6,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
+use yii\db\Query;
 
 /**
  * Site controller
@@ -22,16 +23,18 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'logout'],
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['index'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['admin'],
                     ],
+
                 ],
             ],
+
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -55,7 +58,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+            $count_users = (new Query())->from('user')->count();
+            $count_messages = (new Query())->from('messages')->count();
+            $count_chats = (new Query())->from('chats')->count();
+            return $this->render('index', [
+                'count_user' => $count_users,
+                'count_messages' => $count_messages,
+                'count_chats' => $count_chats,
+            ]);
     }
 
     public function actionLogin()
@@ -63,7 +73,6 @@ class SiteController extends Controller
         if (!\Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
@@ -77,7 +86,8 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
+
+
 }

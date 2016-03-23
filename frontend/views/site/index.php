@@ -15,12 +15,12 @@ $this->title = 'My Yii Application';
 
 <div class="site-contact">
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-sm-4">
             <?= UserProfileWidget::widget() ?>
             <?= ContactsWidget::widget() ?>
             <?= ChatsWidget::widget() ?>
         </div>
-        <div class="col-lg-8">
+        <div class="col-sm-8">
             <?php if(Yii::$app->request->get('id')) {
                 $id = Yii::$app->request->get('id');
                 echo PrivateMessagesWidget::widget([
@@ -51,6 +51,8 @@ $script = <<< JS
 setTimeout(getMessage, 0);
 setInterval(getMessage, 5000);
 function getMessage(){
+    var div = document.getElementById('scroll_div');
+    var position = $('#scroll_div').scrollTop();
     $.ajax({
       type: 'GET',
       url: 'http://amarstd.myjino.ru/iChat/site/ajax-message',

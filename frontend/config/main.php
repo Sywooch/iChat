@@ -13,52 +13,9 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
 
-
-
-
-
-
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
             'baseUrl' => '/iChat/',
-            'enableStrictParsing' => true,
-            'rules' => [
-                [
-                    'pattern' => '',
-                    'route' => '',
-                    'suffix' => '',
-                ],
-                [
-                    'pattern' => '<controller>/<action>/<id:\d+>',
-                    'route' => '<controller>/<action>',
-                    'suffix' => '',
-                ],
-                [
-                    'pattern' => '<controller>/<action>',
-                    'route' => '<controller>/<action>',
-                    'suffix' => '',
-                ],
-                [
-                    'pattern' => '<module>/<controller>/<action>/<id:\d+>',
-                    'route' => '<controller>/<action>',
-                    'suffix' => '',
-                ],
-                [
-                    'pattern' => '<module>/<controller>/<action>',
-                    'route' => '<controller>/<action>',
-                    'suffix' => '',
-                ],
-
-            ],
         ],
-
-        'authManager' => [
-            'class' => 'yii\rbac\DbManager',
-        ],
-
-
-
 
         'user' => [
             'identityClass' => 'common\models\User',

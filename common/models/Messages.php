@@ -8,7 +8,7 @@ use yii\db\ActiveRecord;
 /**
  * This is the model class for table "messages".
  *
- * @property integer $id
+ * @property integer $id_message
  * @property integer $from_user
  * @property integer $for_user
  * @property string $chat_name
@@ -47,7 +47,7 @@ class Messages extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id_message' => 'ID Message',
             'from_user' => 'From User',
             'for_user' => 'For User',
             'chat_name' => 'Chat Name',
@@ -58,14 +58,14 @@ class Messages extends ActiveRecord
     }
 
 
-    public static function findAllMessageFromUser($id_user)
+    public static function findAllMessageFromUser($id_user, $my_id)
     {
         return (new \yii\db\Query())
             ->select(['*'])
             ->from('messages')
             ->join('LEFT JOIN', 'user', 'messages.from_user = user.id')
-            ->where(['from_user' => Yii::$app->user->identity->id, 'for_user' => $id_user])
-            ->orWhere(['from_user' => $id_user, 'for_user' => Yii::$app->user->identity->id])
+            ->where(['from_user' => $my_id, 'for_user' => $id_user])
+            ->orWhere(['from_user' => $id_user, 'for_user' => $my_id])
             ->andWhere(['chat_name' => 'private'])
             ->orderBy('date_time')
             ->all();
@@ -81,7 +81,4 @@ class Messages extends ActiveRecord
             ->orderBy('date_time')
             ->all();
     }
-
-
-
 }

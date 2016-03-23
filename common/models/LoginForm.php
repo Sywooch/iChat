@@ -49,7 +49,6 @@ class LoginForm extends Model
                 $session->setFlash('notValidEmail', 'Ваш аккаунт не активирован, перейдите по ссылке отправленной на Email.');
                 $this->addError($attribute, 'Аккаунт заблокирован.');
             }
-
         }
     }
 
@@ -81,7 +80,6 @@ class LoginForm extends Model
         if ($this->_user === null) {
             $this->_user = User::findByEmail($this->username);
         }
-
         return $this->_user;
     }
 }

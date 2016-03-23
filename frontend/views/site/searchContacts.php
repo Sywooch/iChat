@@ -26,7 +26,7 @@ $this->title = 'My Yii Application';
 
                 <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                    'filterModel' => $dataProvider,
+
                     'rowOptions' => function ($data) use ($contacts, $blocked_users)
                     {
                         if($data['id'] == Yii::$app->user->identity->id) {

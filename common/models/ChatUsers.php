@@ -133,10 +133,10 @@ class ChatUsers extends ActiveRecord
     }
 
 
-    public static function getAllChat()
+    public static function getAllChat($id)
     {
         $my_chats_name = self::findAll([
-           'id_user' => Yii::$app->user->identity->id,
+           'id_user' => $id,
         ]);
             foreach($my_chats_name as $item)
             {

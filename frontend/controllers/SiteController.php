@@ -89,11 +89,6 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-
-
-
-
-
         if (Yii::$app->user->isGuest)
         {
             return $this->actionLogin();
@@ -160,7 +155,7 @@ class SiteController extends Controller
                 Yii::$app->session->setFlash('danger', 'Пользователь занес вас в черный список, вы не можете добавить его в контакты и писать ему сообщения.');
                 return $this->redirect(['site/index']);
             } else {
-                $messages = Messages::findAllMessageFromUser(Yii::$app->request->get('id'));
+                $messages = Messages::findAllMessageFromUser(Yii::$app->request->get('id'), Yii::$app->user->identity->id);
                 Contacts::readContact(Yii::$app->user->identity->id, Yii::$app->request->get('id'));
                 if($messages == null) {
                     echo '<p class="text-center" style="margin-top: 50px; font-size: 18px">Сообщений нет! Будь первым!</p>';
@@ -202,7 +197,7 @@ class SiteController extends Controller
                         $message_for_ajax .= '">';
                     }
                     $message_for_ajax .= '<p style="margin-top: 10px">';
-                    $message_for_ajax .= $message['message'];
+                    $message_for_ajax .= Html::encode($message['message']);
                     $message_for_ajax .= '</p>';
                     $message_for_ajax .= '</p>';
                     $message_for_ajax .= '</div>';
@@ -255,7 +250,7 @@ class SiteController extends Controller
                         $message_for_ajax .= '">';
                     }
                     $message_for_ajax .= '<p style="margin-top: 10px">';
-                    $message_for_ajax .= $message['message'];
+                    $message_for_ajax .= Html::encode($message['message']);
                     $message_for_ajax .= '</p>';
                     $message_for_ajax .= '</p>';
                     $message_for_ajax .= '</div>';
@@ -308,7 +303,7 @@ class SiteController extends Controller
 
     public function actionAjaxChats()
     {
-        $all_chats = ChatUsers::getAllChat();
+        $all_chats = ChatUsers::getAllChat(Yii::$app->user->identity->id);
         $chats_for_ajax = null;
         if($all_chats == null) {
             $chats_for_ajax .= '<p style="text-align: center; margin-top: 15px">У вас нет ни одного чата!<br />';
@@ -390,7 +385,7 @@ class SiteController extends Controller
         }
 
             $contacts = Contacts::findAllContacts(Yii::$app->user->identity->id);
-        $all_chats = ChatUsers::getAllChat();
+        $all_chats = ChatUsers::getAllChat(Yii::$app->user->identity->id);
             return $this->render('addUserChat', [
                 'all_chats' => $all_chats,
                 'contacts' => $contacts,
@@ -604,7 +599,7 @@ class SiteController extends Controller
                 ],
 
             ]);
-            $all_chats = ChatUsers::getAllChat();
+            $all_chats = ChatUsers::getAllChat(Yii::$app->user->identity->id);
             return $this->render('searchContacts', [
                 'all_chats' => $all_chats,
                 'blocked_users' => $blocked_users,

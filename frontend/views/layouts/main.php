@@ -37,6 +37,12 @@ AppAsset::register($this);
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Войти', 'url' => ['site/login']];
     } else {
+
+    if(Yii::$app->user->can('admin')) {
+        $menuItems[] = [
+            'label' => 'Админка', 'url' => '/iChat/admin',
+        ];
+    }
         $menuItems[] = [
             'label' => 'Пользователи', 'url' => ['site/search-contacts'],
         ];
